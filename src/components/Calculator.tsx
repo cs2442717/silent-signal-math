@@ -29,8 +29,8 @@ const Calculator: React.FC = () => {
       setInputSequence([]);
     }
     
-    // Special sequence to exit calculator mode: 0 0 0 0
-    if (inputSequence.join('') === '0000') {
+    // Special sequence to exit calculator mode: 1111=
+    if (inputSequence.join('') === '1111=') {
       setCalculatorMode(false);
       setInputSequence([]);
     }
