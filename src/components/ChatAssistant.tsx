@@ -117,7 +117,7 @@ const ChatAssistant: React.FC = () => {
     }
     
     // Default response if no keywords match
-    return `Thank you for sharing. If you're dealing with domestic violence, help is available. The National Domestic Violence Hotline is available 24/7 at 1-800-799-7233 or by texting START to 88788. Would you like more specific resources on safety planning, legal options, or emotional support?`;
+    return `Look at the calculator and try out Mathway for more help in solving your math problem! We are glad to assist you today!`;
   };
   
   return (
