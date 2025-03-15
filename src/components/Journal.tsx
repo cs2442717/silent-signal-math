@@ -18,7 +18,7 @@ const Journal: React.FC = () => {
     if (!newEntry.trim()) {
       toast({
         title: "Error",
-        description: "Journal entry cannot be empty",
+        description: "Math problem cannot be empty",
         variant: "destructive",
       });
       return;
@@ -29,8 +29,8 @@ const Journal: React.FC = () => {
     setIsAddingEntry(false);
     
     toast({
-      title: "Journal Entry Added",
-      description: "Your journal entry has been saved",
+      title: "Math Log Added",
+      description: "Your math problem has been saved",
     });
   };
   
@@ -38,8 +38,8 @@ const Journal: React.FC = () => {
     removeJournalEntry(id);
     
     toast({
-      title: "Journal Entry Removed",
-      description: "Your journal entry has been removed",
+      title: "Math Log Added",
+      description: "Your math problem has been saved",
     });
   };
   
