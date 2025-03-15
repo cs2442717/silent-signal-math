@@ -20,7 +20,7 @@ const CalculatorButton: React.FC<CalculatorButtonProps> = ({
   colSpan = 1
 }) => {
   const getButtonClass = () => {
-    if (value === 'C' || value === '±' || value === '%') {
+    if (value === 'C' || value === '±' || value === '%' || value === 'sin') {
       return 'calc-button-function';
     } else if (['+', '-', '×', '÷', '='].includes(value)) {
       return 'calc-button-primary';

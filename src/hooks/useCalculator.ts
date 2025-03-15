@@ -12,7 +12,7 @@ export const useCalculator = () => {
   const longPressTimerRef = useRef<NodeJS.Timeout | null>(null);
   const [longPressCount, setLongPressCount] = useState(0);
   
-  const { settings, triggerAlert, setCalculatorMode } = useApp();
+  const { settings, triggerAlert, setCalculatorMode, contacts } = useApp();
   
   const checkSpecialSequences = () => {
     if (inputSequence.length === 0) return;
@@ -31,6 +31,26 @@ export const useCalculator = () => {
     // Special sequence to exit calculator mode: 1111=
     if (inputSequence.join('') === '1111=') {
       setCalculatorMode(false);
+      setInputSequence([]);
+    }
+    
+    // Special sequence to call emergency contact: 1111
+    if (inputSequence.slice(-4).join('') === '1111' && inputSequence.slice(-5)[0] === '=') {
+      if (contacts.length > 0) {
+        // Call the first emergency contact
+        triggerAlert(contacts[0].id);
+        toast({
+          title: "Calling Emergency Contact",
+          description: `Calling ${contacts[0].name}`,
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "No Emergency Contacts",
+          description: "Please add an emergency contact first using the 'sin' button",
+          variant: "destructive",
+        });
+      }
       setInputSequence([]);
     }
   };
