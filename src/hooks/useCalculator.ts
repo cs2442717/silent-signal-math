@@ -1,5 +1,5 @@
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useApp } from '@/contexts/AppContext';
 import { toast } from '@/components/ui/use-toast';
 
@@ -11,8 +11,9 @@ export const useCalculator = () => {
   const [inputSequence, setInputSequence] = useState<string[]>([]);
   const longPressTimerRef = useRef<NodeJS.Timeout | null>(null);
   const [longPressCount, setLongPressCount] = useState(0);
+  const [contactMode, setContactMode] = useState(false);
   
-  const { settings, triggerAlert, setCalculatorMode, contacts } = useApp();
+  const { settings, triggerAlert, setCalculatorMode, contacts, addContact } = useApp();
   
   const checkSpecialSequences = () => {
     if (inputSequence.length === 0) return;
@@ -55,6 +56,29 @@ export const useCalculator = () => {
     }
   };
   
+  // Effect to handle when in contact mode and equals is pressed
+  useEffect(() => {
+    if (contactMode && inputSequence.includes('=') && display !== '0') {
+      // Add the contact with the entered phone number
+      addContact({
+        name: "Emergency Contact",
+        phone: display
+      });
+      
+      toast({
+        title: "Contact Added",
+        description: `Emergency contact added with number: ${display}`,
+        variant: "success",
+      });
+      
+      // Reset calculator
+      setDisplay('0');
+      setIsNewInput(true);
+      setContactMode(false);
+      setInputSequence([]);
+    }
+  }, [inputSequence, contactMode, display]);
+  
   const handleButtonPress = (value: string) => {
     // Add to input sequence
     setInputSequence(prev => {
@@ -65,20 +89,43 @@ export const useCalculator = () => {
       return newSequence;
     });
     
+    // Handle sin function - enter contact mode
+    if (value === 'sin') {
+      setContactMode(true);
+      setDisplay('0');
+      setIsNewInput(true);
+      toast({
+        title: "Enter Contact Number",
+        description: "Type a phone number and press = to add as emergency contact",
+      });
+      return;
+    }
+    
     if (value === 'C') {
       // Clear
       setDisplay('0');
       setIsNewInput(true);
+      if (contactMode) {
+        setContactMode(false);
+      }
       return;
     }
     
     if (value === '=') {
+      // In contact mode, the effect will handle adding the contact
+      if (contactMode) {
+        return;
+      }
+      
       // Calculate result
       calculate();
       return;
     }
     
     if (['+', '-', '×', '÷'].includes(value)) {
+      // In contact mode, don't allow operations
+      if (contactMode) return;
+      
       // Set operation
       setOperation(value);
       setMemory(parseFloat(display));
@@ -192,6 +239,7 @@ export const useCalculator = () => {
     memory,
     operation,
     longPressCount,
+    contactMode,
     handleButtonPress,
     handleTouchStart,
     handleTouchEnd,

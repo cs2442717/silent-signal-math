@@ -9,6 +9,7 @@ const Calculator: React.FC = () => {
     display,
     memory,
     operation,
+    contactMode,
     handleButtonPress,
     handleTouchStart,
     handleTouchEnd,
@@ -36,7 +37,9 @@ const Calculator: React.FC = () => {
       />
       
       <div className="mt-4 text-center text-xs text-muted-foreground">
-        Enter PIN sequence to access additional features
+        {contactMode ? 
+          "Enter contact number and press = to save" : 
+          "Enter PIN sequence to access additional features"}
       </div>
     </div>
   );
